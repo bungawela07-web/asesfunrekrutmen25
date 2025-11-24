@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Masuk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f2f4f8;
+    }
+    .center-box {
+      width: 350px;
+      padding: 25px;
+      margin: 120px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    input {
+      width: 95%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #4a74f5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #resultPage {
+      display: none;
+      padding: 40px;
+    }
+    h1 { margin-bottom: 0px; }
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <div id="loginPage" class="center-box">
+    <h2>Login / Masuk</h2>
+    <input id="nama" placeholder="Masukkan Nama" />
+    <input id="email" placeholder="Masukkan Email" />
+    <button onclick="masuk()">Masuk</button>
+  </div>
+
+  <div id="resultPage">
+    <h1>Selamat</h1>
+    <h2>Anda Lolos Seleksi Administrasi</h2>
+    <p id="namaOutput"></p>
+
+    <p>Terima kasih atas partisipasi Anda dalam proses rekrutmen untuk posisi <b>MT Officer</b> di Asesfun Departement.</p>
+
+    <p>Dengan demikian, Anda berhak melanjutkan ke tahap berikutnya, yaitu <b>Psikotes</b>, yang akan dilaksanakan pada:</p>
+    <ul>
+      <li><b>Hari/Tanggal</b> : Jumat, 28 November 2025</li>
+      <li><b>Waktu</b> : 15.30 WIB</li>
+      <li><b>Tempat</b> : PPM Manajemen, Gd A R. 300</li>
+      <li><b>Dress Code</b> : Baju Putih Bawah Hitam </li>
+    </ul>
+
+    <p><b>Catatan:</b></p>
+    <ul>
+      <li>Hadir 10–15 menit sebelum sesi dimulai</li>
+      <li>Membawa tumbler</li>
+      <li>Jika berhalangan hadir, konfirmasi maksimal H-1</li>
+    </ul>
+
+    <p>Apabila ada yang ingin ditanyakan, hubungi:<br><b> 0813-8076-4975</b></p>
+
+    <p>Hormat Kami<br><b>Tim Reksel Asesfun x PPM Manajemen</b></p>
+  </div>
+
+  <script>
+    function masuk() {
+      let nama = document.getElementById("nama").value.trim();
+      let email = document.getElementById("email").value.trim();
+
+      if (!nama || !email) {
+        alert("Nama dan Email wajib diisi!");
+        return;
+      }
+
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("resultPage").style.display = "block";
+      document.getElementById("namaOutput").innerHTML = `<b>${nama}</b>, berikut informasi untuk Anda:`;
+
+      mulaiConfetti();
+    }
+
+    // CONFETTI jatuh dari atas ke bawah TANPA JEDA
+    const canvas = document.getElementById("confettiCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let confettiList = [];
+    const warna = ["#ff4757", "#1e90ff", "#2ed573", "#ffa502", "#a55eea"];
+
+    function buatConfetti() {
+      for (let i = 0; i < 2; i++) {
+        confettiList.push({
+          x: Math.random() * canvas.width,
+          y: -10,
+          size: Math.random() * 5 + 2,
+          color: warna[Math.floor(Math.random() * warna.length)],
+          speed: Math.random() * 1.5 + 0.5
+        });
+      }
+    }
+
+    function renderConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      confettiList.forEach((c, i) => {
+        ctx.fillStyle = c.color;
+        ctx.fillRect(c.x, c.y, c.size, c.size);
+        c.y += c.speed;
+
+        if (c.y > canvas.height) confettiList.splice(i, 1);
+      });
+
+      requestAnimationFrame(renderConfetti);
+    }
+
+    function mulaiConfetti() {
+      setInterval(buatConfetti, 250); // tanpa jeda jatuh terus
+      renderConfetti();
+    }
+  </script>
+</body>
+</html>
